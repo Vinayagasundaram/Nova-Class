@@ -14,6 +14,7 @@ from datetime import datetime
 import pandas as pd
 from src.components.dialog_attendance_results import attendance_result_dialog
 
+
 def teacher_screen():
 
     style_background_dashboard()
@@ -27,12 +28,15 @@ def teacher_screen():
         teacher_screen_register()
 
 
-
 def teacher_dashboard():
+
     teacher_data = st.session_state.teacher_data
+
     c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
+
     with c1:
         header_dashboard()
+
     with c2:
         st.subheader(f"""Welcome, {teacher_data['name']} """)
         if st.button("Logout", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
@@ -40,13 +44,11 @@ def teacher_dashboard():
             del st.session_state.teacher_data 
             st.rerun()
 
-
     st.space()
 
     if "current_teacher_tab" not in st.session_state:
         st.session_state.current_teacher_tab = 'take_attendance'
     tab1, tab2, tab3 = st.columns(3)
-
 
     with tab1:
         type1 = "primary" if st.session_state.current_teacher_tab == 'take_attendance' else "tertiary"
@@ -66,7 +68,6 @@ def teacher_dashboard():
             st.session_state.current_teacher_tab = 'attendance_records'
             st.rerun()
 
-
     st.divider()
 
     if st.session_state.current_teacher_tab == "take_attendance":
@@ -76,17 +77,17 @@ def teacher_dashboard():
     if st.session_state.current_teacher_tab == "attendance_records":
         teacher_tab_attendance_records()
 
-    
-
-
     footer_dashboard()
 
 # def teacher_tab_take_attendance():
 #         st.header("hi teacher_tab_take_attendance")
 
+
 def teacher_tab_manage_subjects():
+
     teacher_id = st.session_state.teacher_data['teacher_id']
     col1, col2 = st.columns(2)
+
     with col1:
         st.header('Manage Subjects', width='stretch')
 
@@ -94,12 +95,10 @@ def teacher_tab_manage_subjects():
         if st.button('Create New Subject', width='stretch'):
             create_subject_dialog(teacher_id)
 
-
     subjects = get_teacher_subjects(teacher_id)
 
     if subjects:
         for sub in subjects:
-
             stats = [
                 ("🫂", "Students", sub.get('total_students', 0)),
                 ("🕰️", "Classes", sub.get('total_classes', 0)),
@@ -126,6 +125,7 @@ def teacher_tab_manage_subjects():
 
 
 def teacher_tab_take_attendance():
+
     teacher_id = st.session_state.teacher_data['teacher_id']
     st.header('Take AI Attendance')
 
@@ -169,7 +169,6 @@ def teacher_tab_take_attendance():
             st.session_state.attendance_images = []
             st.rerun()
 
-
     with c2:
         
         if st.button('Run Face Analysis', width='stretch', type='secondary', icon=':material/analytics:', disabled=not has_photos):
@@ -179,7 +178,6 @@ def teacher_tab_take_attendance():
                 for idx, img in enumerate(st.session_state.attendance_images):
                     img_np = np.array(img.convert('RGB'))
                     detected, _, _ = predict_attendance(img_np)
-
 
                     if detected:
                         for sid in detected.keys():
@@ -193,11 +191,9 @@ def teacher_tab_take_attendance():
                 if not enrolled_students:
                     st.warning('No students enrolled in this course')
                 else:
-
                     results, attendance_to_log  = [], []
 
                     current_timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-
 
                     for node in enrolled_students:
                         student = node['students']
@@ -220,11 +216,11 @@ def teacher_tab_take_attendance():
 
                 attendance_result_dialog(pd.DataFrame(results), attendance_to_log)
 
+
 def teacher_tab_attendance_records():
+
     st.header('Attendance Records')
-
     teacher_id = st.session_state.teacher_data['teacher_id']
-
     records = get_attendance_for_teacher(teacher_id)
 
     if not records:
@@ -243,10 +239,7 @@ def teacher_tab_attendance_records():
             "is_present": bool(r.get('is_present', False))
         })
 
-
     df = pd.DataFrame(data)
-
-
 
     summary = (
         df.groupby(['ts_group', 'Time', 'Subject', 'Subject Code'])
@@ -254,7 +247,6 @@ def teacher_tab_attendance_records():
             Present_Count = ('is_present', 'sum'),
             Total_Count =('is_present', 'count')
         ).reset_index()
-
     )
 
     summary['Attendance Stats'] = (
@@ -267,8 +259,10 @@ def teacher_tab_attendance_records():
                   )
     
     st.dataframe(display_df, width='stretch', hide_index=True)
+
         
 def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm):
+
     if not teacher_username or not teacher_name or not teacher_pass:
         return False, "All fields are required!"
     if check_teacher_exists(teacher_username):
@@ -282,7 +276,9 @@ def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_
     except Exception as e:
         return False, "Unexpected Error!"
 
+
 def login_teacher(username, password):
+
     if not username or not password:
         return False
     
@@ -295,8 +291,10 @@ def login_teacher(username, password):
         return True
     
     return False
+
     
 def teacher_screen_login():
+    
     c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
     with c1:
         header_dashboard()
@@ -305,7 +303,6 @@ def teacher_screen_login():
             st.session_state['login_type']= None
             st.rerun()
         
-    
     st.header('Login', text_alignment='center')
     st.space()
     st.space()
@@ -328,7 +325,6 @@ def teacher_screen_login():
             else:
                 st.error("Invalid username and password combo")
 
-
     with btnc2:
         if st.button('Register Instead', type="primary", icon=':material/passkey:', width='stretch'):
             st.session_state.teacher_login_type = "register"
@@ -336,7 +332,9 @@ def teacher_screen_login():
 
     footer_dashboard()
 
+
 def teacher_screen_register():
+
     c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
     with c1:
         header_dashboard()
@@ -372,7 +370,6 @@ def teacher_screen_register():
                 st.rerun()
             else:
                 st.error(message)
-
 
 
     with btnc2:

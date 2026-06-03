@@ -1,12 +1,11 @@
 import streamlit as st
 from src.database.db import enroll_student_to_subject
 from src.database.config import supabase
-
 import time
-
 
 @st.dialog("Enroll in Subject")
 def enroll_dialog():
+    
     st.write('Enter the subject code provided by your teacher to enroll')
     join_code = st.text_input('Subject Code', placeholder='Eg. CS101')
 

@@ -4,7 +4,6 @@ from src.database.config import supabase
 from PIL import Image
 import time
 
-
 @st.dialog("Capture or upload photos")
 def add_photos_dialog():
 

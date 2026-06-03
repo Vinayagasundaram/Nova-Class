@@ -10,7 +10,9 @@ import time
 from src.components.dialog_enroll import enroll_dialog
 from src.components.subject_card import subject_card
 
+
 def student_dashboard():
+
     student_data = st.session_state.student_data
     student_id = student_data['student_id']
     c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
@@ -23,7 +25,6 @@ def student_dashboard():
             del st.session_state.student_data 
             st.rerun()
 
-
     st.space()
 
     c1, c2 =st.columns(2)
@@ -33,9 +34,7 @@ def student_dashboard():
         if st.button('Enroll in Subject', type='primary', width='stretch'):
             enroll_dialog()
 
-
     st.divider()
-
 
     with st.spinner('Loading your enrolled subjects..'):
         subjects = get_student_subjects(student_id)
@@ -54,12 +53,10 @@ def student_dashboard():
         if log.get('is_present'):
             stats_map[sid]['attended'] += 1
 
-
     cols = st.columns(2)
     for i, sub_node in enumerate(subjects):
         sub = sub_node['subjects']
         sid = sub['subject_id']
-
 
         stats = stats_map.get(sid,{"total":0, "attended": 0} )
         def unenroll_button(subject_id, subject_name):
@@ -90,6 +87,7 @@ def student_dashboard():
 
 
 def student_screen():
+
     style_background_dashboard()
     style_base_layout()
 
@@ -105,10 +103,13 @@ def student_screen():
             st.rerun()
     
     st.header('Login using FaceID', text_alignment='center')
+
     st.space()
     st.space()
+    
     show_registration = False
     photo_source = st.camera_input("Position your face in the center")
+
     if photo_source:
         img = np.array(Image.open(photo_source))
         with st.spinner('AI is scanning..'):
@@ -136,28 +137,21 @@ def student_screen():
                     show_registration = True
                     
     if show_registration:
-
         with st.container(border=True):
-
                 st.header('Register new Profile')
-
                 new_name = st.text_input("Enter your name", placeholder='E.g. Hamza Rizvi')
-
                 st.subheader('Face Enrollment')
                 st.info("Only face-based attendance is enabled")
 
                 if st.button('Create Account', type='primary'):
-
                     if new_name:
 
                         with st.spinner('Creating profile..'):
-
                             img = np.array(Image.open(photo_source))
                             encodings = get_face_embeddings(img)
 
                             if encodings:
                                 face_emb = encodings[0].tolist()
-
                                 response_data = create_student(
                                     new_name,
                                     face_embedding=face_emb

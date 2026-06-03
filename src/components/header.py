@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def header_home():
 
     logo_url = "https://i.ibb.co/YTYGn5qV/logo.png"
