@@ -6,9 +6,14 @@ from src.components.dialog_auto_enroll import auto_enroll_dialog
 
 def main():
     
+    import os
+    from PIL import Image
+    logo_path = os.path.join(os.path.dirname(__file__), "src", "ui", "logo.png")
+    icon_img = Image.open(logo_path) if os.path.exists(logo_path) else "https://i.ibb.co/YTYGn5qV/logo.png"
+
     st.set_page_config(
-        page_title='SnapClass - Making Attendance faster using AI',
-        page_icon= "https://i.ibb.co/YTYGn5qV/logo.png"
+        page_title='NovaClass - AI-Powered Attendance',
+        page_icon=icon_img
     )
 
     if 'login_type' not in st.session_state:
