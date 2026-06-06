@@ -18,7 +18,7 @@ def home_screen():
             st.rerun()
 
     with col2:
-        st.header("I'm Teacherr")
+        st.header("I'm Teacher")
         st.image("https://i.ibb.co/CsmQQV6X/mascot-prof.png", width=145)
         if st.button('Teacher Portal', type='primary', icon=':material/arrow_outward:', icon_position='right'):
             st.session_state['login_type']='teacher'

@@ -139,7 +139,7 @@ def student_screen():
     if show_registration:
         with st.container(border=True):
                 st.header('Register new Profile')
-                new_name = st.text_input("Enter your name", placeholder='E.g. Hamza Rizvi')
+                new_name = st.text_input("Enter your name", placeholder='E.g. Bruce Wayne')
                 st.subheader('Face Enrollment')
                 st.info("Only face-based attendance is enabled")
 
