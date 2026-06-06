@@ -67,5 +67,3 @@ pip install -r requirements.txt
 # 3. Run the app
 streamlit run app.py
 ```
-
-> ⚠️ You'll need a Supabase project set up with the required tables: `teachers`, `students`, `subjects`, `subject_students`, `attendance_logs`
